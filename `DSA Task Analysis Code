@@ -1,0 +1,46 @@
+#R studio Code:
+
+# Total Number of Vaccination Doses Administered in New Zealand
+# Author: Jarod de Vos
+# Date: March 2022
+
+# Loading the data set into the R studio project
+covid19_data <- read.csv(file.choose())
+
+# Install Packages
+# using the ggplot package for visualization as well as the dplyer package 
+
+install.packages("ggplot2")
+library(ggplot2)
+library(dplyr)
+install.packages("lubridate")
+library(lubridate)
+
+
+# Checking to see whether the data set was imported correctly by reviewing the 
+# start and end of the data
+head(covid19_data)
+tail(covid19_data)
+
+# Create a new date variable called Vaccination_Month_Year formatted to Month and Year instead of day
+# appended to the covid19_data data frame
+covid19_data$Vaccination_Month_Year <- as.Date(covid19_data$Period, tryFormats = c("%Y-%m-%d", "%Y/%m/%d"),
+                     optional = FALSE)
+
+# Create the scatter plot
+# Scale the dates 1 month apart for the Month Year tick marks
+# Change the appearance and the orientation angle of the x axis tick labels
+
+
+daily_total<- ggplot(data = covid19_data, aes( x = Vaccination_Month_Year , y = Value, colour = Label1)) +
+              geom_point() + 
+              ggtitle("Daily Covid-19 Vaccinations") +
+              labs(x = "Date (Days)", y = "Number of Doses Administered") +
+              scale_x_date(date_breaks="1 month", date_labels="%B-%Y") +
+              theme(axis.text.x = element_text(angle = 90)) +
+              labs(colour = "Vaccine administered")
+
+
+# Display the plot
+daily_total 
+
